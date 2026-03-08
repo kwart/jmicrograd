@@ -10,7 +10,7 @@ import java.util.function.Function;
 public class Value {
 
     private static final Value[] EMPTY_CHILD = new Value[] {};
-    private static final Function<Value, Void> BACKPROP_EMPTY = _ -> null;
+    private static final Function<Value, Void> BACKPROP_EMPTY = v -> null;
 
     private final double data;
     private volatile double grad;
@@ -28,6 +28,18 @@ public class Value {
         this.prev = children;
         this.backward = backward;
         this.op = op;
+    }
+
+    public double getData() {
+        return data;
+    }
+
+    public double getGrad() {
+        return grad;
+    }
+
+    public static Value value(double data) {
+        return new Value(data);
     }
 
     private static final Function<Value, Void> BACKPROP_ADD = v -> {
@@ -73,7 +85,7 @@ public class Value {
     }
 
     private static final Function<Value, Void> BACKPROP_RELU = v -> {
-        v.prev[0].grad += (v.data > 0 ? 0. : v.grad);
+        v.prev[0].grad += (v.data > 0 ? v.grad : 0.);
         return null;
     };
 
@@ -88,7 +100,7 @@ public class Value {
 
     public Value sigmoid() {
         double expn = Math.exp(-data);
-        return new Value(1. / (1. - expn), array(this), BACKPROP_SIGMOID, "sigmoid");
+        return new Value(1. / (1. + expn), array(this), BACKPROP_SIGMOID, "sigmoid");
     }
 
     public void backward() {
