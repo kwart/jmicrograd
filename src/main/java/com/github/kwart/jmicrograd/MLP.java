@@ -43,4 +43,10 @@ public class MLP implements Function<Value[], Value[]> {
         return Arrays.stream(layers).mapToInt(Layer::parametersLength).sum();
     }
 
+    public void zeroGrad() {
+        for (Value parameter : parameters()) {
+            parameter.setGrad(0.);
+        }
+    }
+
 }
