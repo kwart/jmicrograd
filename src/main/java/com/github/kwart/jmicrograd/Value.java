@@ -12,7 +12,7 @@ public class Value {
     private static final Value[] EMPTY_CHILD = new Value[] {};
     private static final Function<Value, Void> BACKPROP_EMPTY = v -> null;
 
-    private final double data;
+    private volatile double data;
     private volatile double grad;
     private final Value[] prev;
     private final String op;
@@ -36,6 +36,14 @@ public class Value {
 
     public double getGrad() {
         return grad;
+    }
+
+    public void setData(double data) {
+        this.data = data;
+    }
+
+    public void setGrad(double grad) {
+        this.grad = grad;
     }
 
     public static Value value(double data) {

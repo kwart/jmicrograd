@@ -1,5 +1,6 @@
 package com.github.kwart.jmicrograd;
 
+import java.util.Arrays;
 import java.util.function.Function;
 
 /**
@@ -20,10 +21,26 @@ public class MLP implements Function<Value[], Value[]> {
     @Override
     public Value[] apply(Value[] x) {
         Value[] out = x;
-        for (Layer layer: layers) {
+        for (Layer layer : layers) {
             out = layer.apply(out);
         }
         return out;
+    }
+
+    public Value[] parameters() {
+        Value[] out = new Value[parametersLength()];
+        int idx = 0;
+        for (int i = 0; i < layers.length; i++) {
+            Layer l = layers[i];
+            int lpar = l.parametersLength();
+            System.arraycopy(l.parameters(), 0, out, idx, lpar);
+            idx += lpar;
+        }
+        return out;
+    }
+
+    public int parametersLength() {
+        return Arrays.stream(layers).mapToInt(Layer::parametersLength).sum();
     }
 
 }
