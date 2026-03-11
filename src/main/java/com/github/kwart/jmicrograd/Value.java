@@ -12,8 +12,8 @@ public class Value {
     private static final Value[] EMPTY_CHILD = new Value[] {};
     private static final Function<Value, Void> BACKPROP_EMPTY = v -> null;
 
-    private volatile double data;
-    private volatile double grad;
+    private double data;
+    private double grad;
     private final Value[] prev;
     private final String op;
     private final Function<Value, Void> backward;
@@ -82,7 +82,7 @@ public class Value {
     }
 
     private static final Function<Value, Void> BACKPROP_TANH = v -> {
-        v.prev[0].grad += (1. - Math.pow(v.data, 2.)) * v.grad;
+        v.prev[0].grad += (1. - v.data * v.data) * v.grad;
         return null;
     };
 
