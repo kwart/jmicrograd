@@ -132,6 +132,7 @@ public class Value {
         }
     }
 
+    @SafeVarargs
     private static <T> T[] array(T... values) {
         return values;
     }
