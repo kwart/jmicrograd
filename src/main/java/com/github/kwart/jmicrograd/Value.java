@@ -124,8 +124,7 @@ public class Value {
     }
 
     private static void buildTopo(List<Value> topo, Set<Value> visited, Value value) {
-        if (!visited.contains(value)) {
-            visited.add(value);
+        if (visited.add(value)) {
             for (Value child : value.prev) {
                 buildTopo(topo, visited, child);
             }
